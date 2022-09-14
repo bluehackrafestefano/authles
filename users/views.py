@@ -1,9 +1,10 @@
 import imp
 from django.shortcuts import render, redirect
 from django.contrib.auth import logout
-from django.contrib import messages\
+from django.contrib import messages
 
 from .forms import UserForm, UserProfileForm
+from django.contrib.auth import login
 
 
 # Create your views here.
@@ -30,7 +31,12 @@ def register(request):
             profile = form_profile.save(commit=False)
 
             profile.user = user
-            
+
+            profile.save()
+
+            login(request, user)
+            messages.success(request, 'Logged in successfully!!')
+            return redirect('home')
 
     context = {
         'form_user': form_user,
